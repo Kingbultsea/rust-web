@@ -1,4 +1,4 @@
-mod encoding_example;
+mod encoding;
 
 use std::{
     thread,
@@ -10,7 +10,7 @@ use std::{
 use rust_web::ThreadPool;
 
 fn main() {
-    encoding_example::main::main();
+    encoding::main::main();
 
     let pool = ThreadPool::new(4);
 
