@@ -10,7 +10,7 @@ type Job = Box<dyn FnOnce() + Send + 'static>;
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(move || loop {
-            // 因为是阻塞的，所以不会进到下一个循环
+            // 因为recv是阻塞的，所以不会进到下一个循环
             let message = receiver.lock().unwrap().recv();
 
             match message {
@@ -38,6 +38,7 @@ pub struct ThreadPool {
     sender: Option<mpsc::Sender<Job>>,
 }
 
+// 主线程关闭，关掉其他线程
 impl Drop for ThreadPool {
     fn drop(&mut self) {
         println!("drop ThreadPool");

@@ -1,9 +1,10 @@
 mod encoding_example;
 
 use std::{
+    thread,
     fs::File,
     io::{prelude::*, BufReader},
-    net::{TcpListener, TcpStream},
+    net::{TcpListener, TcpStream}, time::Duration,
 };
 
 use rust_web::ThreadPool;
@@ -22,6 +23,8 @@ fn main() {
             handle_connection(stream);
         });
     }
+
+    println!("done");
 }
 
 fn handle_connection(mut stream: TcpStream) {
@@ -48,6 +51,8 @@ fn handle_connection(mut stream: TcpStream) {
     let mut buffer = vec![0; buffer_size];
 
     stream.write_all(format!("HTTP/1.1 200 OK\r\nContent-Length: {size}\r\n\r\n").as_bytes()).unwrap();
+
+    thread::sleep(Duration::from_secs(5));
 
     loop {
         match reader.read(&mut buffer) {
